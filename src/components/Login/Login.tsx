@@ -32,8 +32,18 @@ export const Login = () => {
         formData
       );
       localStorage.setItem('token', response.data.access_token);
+
+      // Obtener datos del usuario
+      const userResponse = await axios.get('http://localhost:8000/api/user', {
+        headers: {
+          Authorization: `Bearer ${response.data.access_token}`,
+        },
+      });
+
+      localStorage.setItem('user', JSON.stringify(userResponse.data));
       setError(null);
       navigate('/');
+      window.location.reload();
     } catch (error) {
       setError('Credenciales inválidas');
     }
